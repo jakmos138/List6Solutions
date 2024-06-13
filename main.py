@@ -63,6 +63,22 @@ def smallest_subarray_with_sum_greater_than_v(A, v):
 
 
 # Task 1c
+def smallest_missing_number(arr):
+    # Assuming array is sorted and integers are distinct as per specification
+    if len(arr) == 0:
+        return None
+    else:
+        # Check if the array elements are increasing or decreasing
+        variance = arr[1] - arr[0]
+        result = 0
+        for number in arr[::int(variance/abs(variance))]:
+            if number == result+1:
+                result = number
+            else:
+                result += 1
+                break
+        return result
+
 
 # Example usages:
 # Task 1a
@@ -81,3 +97,12 @@ print("Task 1b:")
 print(f"A: {A}")
 result = smallest_subarray_with_sum_greater_than_v(A, v)
 print(f"The smallest subarray with sum greater than {v} is: {A[result[0]:result[1]]}", end="\n\n")
+
+# Task 1c
+A = [1,2,4,5,8,9,10,20,30,138]
+
+print("Task 1c:")
+print(f"A: {A}")
+# checking both types of sorted arrays
+print(f"The smallest missing number in the array {A} is: {smallest_missing_number(A)}")
+print(f"The smallest missing number in the array {A} is: {smallest_missing_number(sorted(A, reverse=True))}", end="\n\n")
