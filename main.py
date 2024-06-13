@@ -1,4 +1,4 @@
-import numpy as np
+from collections import defaultdict
 
 # Task 1a
 def find_majority_element(arr):
@@ -80,6 +80,40 @@ def smallest_missing_number(arr):
         return result
 
 
+# Task 1e
+def detect_cycle_in_directed_graph(V, edges):
+    # create a dictionary to store edges
+    graph = defaultdict(list)
+    for u, v in edges:
+        graph[u].append(v)
+    
+    # create lists for support during search
+    visited = [False] * V # used to check if a node was ever visited during dfs
+    rec_stack = [False] * V # used to check if a node was visited in the current recursion cycle
+
+    # dfs algorithm logic focusing on cycle finding
+    def dfs(v):
+        visited[v] = True
+        rec_stack[v] = True
+        
+        for neighbor in graph[v]:
+            if not visited[neighbor]:
+                if dfs(neighbor):
+                    return True
+            elif rec_stack[neighbor]:
+                return True
+        
+        rec_stack[v] = False
+        return False
+    
+    # initialization of solving
+    for node in range(V):
+        if not visited[node]:
+            if dfs(node):
+                return True
+    return False
+
+
 # Example usages:
 # Task 1a
 A = [3, 3, 4, 2, 4, 4, 2, 4, 4]
@@ -106,3 +140,22 @@ print(f"A: {A}")
 # checking both types of sorted arrays
 print(f"The smallest missing number in the array {A} is: {smallest_missing_number(A)}")
 print(f"The smallest missing number in the array {A} is: {smallest_missing_number(sorted(A, reverse=True))}", end="\n\n")
+
+# Task 1e
+# Example usage:
+V = 5
+edges = [(0, 1), (1, 2), (2, 4), (2, 3)]
+
+print("Task 1e:")
+print("Test 1 (no cycles):")
+print(f"Edges: {edges}")
+has_cycle = detect_cycle_in_directed_graph(V, edges)
+print(f"Graph has a cycle: {has_cycle}")
+
+V = 4
+edges = [(0, 1), (1, 2), (2, 0), (2, 3)]
+
+print("Test 2 (has cycles):")
+print(f"Edges: {edges}")
+has_cycle = detect_cycle_in_directed_graph(V, edges)
+print(f"Graph has a cycle: {has_cycle}")
